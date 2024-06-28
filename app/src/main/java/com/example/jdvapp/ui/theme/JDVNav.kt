@@ -1,6 +1,7 @@
 package com.example.jdvapp.ui.theme
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -13,40 +14,55 @@ import com.example.jdvapp.ui.theme.screen.GridScreen
 import com.example.jdvapp.ui.theme.screen.LogScreen
 import com.example.jdvapp.ui.theme.screen.RulesScreen
 import com.example.jdvapp.ui.theme.screen.SaveScreen
-
 sealed class Routes(val route: String) {
-    object HomeScreen : Routes("HomeScreen")
-    object GridScreen : Routes("GridScreen")
-    object LogScreen : Routes("LogScreen")
-    object RulesScreen : Routes("RulesScreen")
-    object SaveScreen : Routes("SaveScreen/{id}") {
+    // Route 1
+     object HomeScreen : Routes("HomeScreen")
+    //Route 2
+     object GridScreen : Routes("GridScreen")
+    //Route 5
+     object LogScreen : Routes("LogScreen")
+    //Route 6
+     object RulesScreen : Routes("RulesScreen")
+    //Route 3 avec paramètre
+     object SaveScreen : Routes("SaveScreen/{id}") {
+        //Méthode(s) qui vienne(nt) remplit le ou les paramètres
         fun withObject(data: UserBean) = "SaveScreen/${data.id}"
     }
 }
-
 @Composable
-fun AppNavigation() {
+fun AppNavigation(viewModel: JDVViewModel) {
+
     val navHostController: NavHostController = rememberNavController()
 
+    //viewModel appartient au framework permet de récupérer une instance déjà existante s'il en existe une
+//Import version avec Composable
     NavHost(navController = navHostController, startDestination = Routes.GridScreen.route) {
-        composable(Routes.HomeScreen.route) {
-            GridScreen(navHostController, JDVViewModel())
+        composable(Routes.GridScreen.route) {
+            //on peut passer le navHostController à un écran s'il déclenche des navigations
+            GridScreen(navHostController,JDVViewModel())
         }
 
+        //Route 1 vers notre LogScreen
         composable(Routes.LogScreen.route) {
-            LogScreen(navHostController, JDVViewModel())
+            //on peut passer le navHostController à un écran s'il déclenche des navigations
+            LogScreen(navHostController, JDVViewModel = JDVViewModel())
         }
-
+        //Route 2 vers notre RulesScreen
         composable(Routes.RulesScreen.route) {
-            RulesScreen(navHostController, JDVViewModel())
+            //on peut passer le navHostController à un écran s'il déclenche des navigations
+            RulesScreen(navHostController, JDVViewModel = JDVViewModel())
         }
-
+        //Route 2 vers un liste des save
         composable(
             route = Routes.SaveScreen.route,
             arguments = listOf(navArgument("id") { type = NavType.LongType })
         ) {
             val idNav = it.arguments?.getLong("id") ?: 10
-            SaveScreen(navHostController, JDVViewModel())
+            SaveScreen(navHostController,  JDVViewModel = JDVViewModel())
         }
     }
 }
+
+
+
+

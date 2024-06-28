@@ -10,8 +10,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import com.example.jdvapp.ui.theme.AppNavigation
+
 import com.example.jdvapp.ui.theme.JDVAppTheme
+import com.example.jdvapp.ui.theme.model.JDVViewModel
 import com.example.jdvapp.ui.theme.screen.GridScreen
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +28,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    GridScreen()
+                    AppNavigation(JDVViewModel())
+
                 }
             }
         }

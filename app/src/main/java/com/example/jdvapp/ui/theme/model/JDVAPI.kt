@@ -25,12 +25,9 @@ object JDVAPI {
     }
     fun sendPost(url: String, toSend: Any?): String {
         println("url : $url")
-
         val json = gson.toJson(toSend)
-
         val body = json.toRequestBody(MEDIA_TYPE_JSON)
         val request = Request.Builder().url(url).post(body).build()
-
         return client.newCall(request).execute().use {
             if (!it.isSuccessful) {
                 throw Exception("Réponse du serveur incorrect :${it.code}")
