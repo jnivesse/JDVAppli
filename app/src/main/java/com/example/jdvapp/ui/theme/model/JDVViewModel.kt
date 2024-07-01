@@ -1,19 +1,9 @@
 package com.example.jdvapp.ui.theme.model
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.size
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
@@ -34,6 +24,7 @@ class JDVViewModel:ViewModel() {
     var gridVm =  randomGrid(gridHeightVm,gridWidthVm)
 
     var user = mutableStateOf(UserBean(userPseudo = ""))
+
     fun randomGrid(gridHeightVm: MutableIntState,gridWidthVm: MutableIntState):MutableList<MutableList<Int>> {
         return MutableList(gridHeightVm.intValue) { MutableList(gridWidthVm.intValue) { if (Random.nextBoolean()) LIVE else SLEEP } }
     }
@@ -114,14 +105,38 @@ class JDVViewModel:ViewModel() {
             }
         }
     }
-    fun stringToGrid(jsonString: String): ArrayList<ArrayList<Int>> {
+    fun stringToGrid(jsonString: String): MutableList<MutableList<Int>> {
         val gson = Gson()
-        val type = object : TypeToken<ArrayList<ArrayList<Int>>>() {}.type
+        val type = object : TypeToken<MutableList<MutableList<Int>>>() {}.type
         return gson.fromJson(jsonString, type)
     }
 
     fun addGrid(){
-        user.value.id?.let { JDVAPI.addGrid(it, grid = gridVm.toString()) }
+        viewModelScope.launch(Dispatchers.Default) {
+            try {
+                user.value.id?.let { JDVAPI.addGrid(it, grid = gridVm.toString()) }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
     }
+    fun createUser(pseudo: String){
+        viewModelScope.launch(Dispatchers.Default) {
+            try {
+               JDVAPI.createUser(pseudo)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
 
+    }
+    fun loadUser(pseudo: String){
+        viewModelScope.launch(Dispatchers.Default) {
+            try {
+                user = mutableStateOf(JDVAPI.loadUser(pseudo))
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
 }

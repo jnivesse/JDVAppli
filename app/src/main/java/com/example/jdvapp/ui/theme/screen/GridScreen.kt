@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -133,7 +134,7 @@ fun GridScreen(navHostController: NavHostController? , JDVViewModel: JDVViewMode
             if(JDVViewModel.user.value.id!=null){
                 Image(painter = painterResource(id = R.drawable.enregistrer), contentDescription = "enregisté",modifier = Modifier
                     .size(75.dp)
-                    .clickable(onClick = { println("save") })
+                    .clickable(onClick = { JDVViewModel.addGrid() })
                 )}
             Image(painter = painterResource(id = R.drawable.exterminatus), contentDescription ="exterminatus",modifier = Modifier
                 .size(75.dp)
@@ -158,8 +159,8 @@ fun SwitchColorButton(
     colorState:Int,
     onClick: () -> Unit
 ) {
-    var isRed by remember { mutableStateOf(colorState) }
-    val buttonColor = if (isRed== LIVE) Color.Red.copy(alpha = 0.85f) else Color.White.copy(alpha = 0.85f)
+    var isRed by remember { mutableIntStateOf(colorState) }
+    val buttonColor = if (isRed == LIVE) Color.Red.copy(alpha = 0.85f) else Color.White.copy(alpha = 0.85f)
     Surface(
         modifier = modifier
             .size(size),

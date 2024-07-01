@@ -1,5 +1,6 @@
 package com.example.jdvapp.ui.theme.model
 
+import androidx.compose.ui.text.input.TextFieldValue
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -11,7 +12,7 @@ object JDVAPI {
     val MEDIA_TYPE_JSON = "application/json; charset=utf-8".toMediaType()
     val gson = Gson()
     val client = OkHttpClient()
-    const val URL_SERVER = "http://localhost:8080/JDVBack"
+    const val URL_SERVER = "http://82.216.137.249:8080/JDVBack"
     fun sendGet(url: String): String {
         println("url : $url")
         val request = Request.Builder().url(url).get().build()
@@ -35,10 +36,10 @@ object JDVAPI {
             it.body.string()
         }
     }
-    fun createUser(userPseudo:String) {
+    fun createUser(userPseudo: String) {
          sendPost("$URL_SERVER/createUser", userPseudo)
     }
-    fun loadUser(userPseudo:String): UserBean? {
+    fun loadUser(userPseudo: String): UserBean {
         val responseJson = sendPost("$URL_SERVER/loadUser", userPseudo)
         return gson.fromJson(responseJson, UserBean::class.java)
     }
