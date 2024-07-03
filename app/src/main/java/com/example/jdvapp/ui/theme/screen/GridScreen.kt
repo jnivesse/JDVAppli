@@ -50,6 +50,7 @@ const val LIVE = 1
 
 @Composable
 fun GridScreen(navHostController: NavHostController? , JDVViewModel: JDVViewModel) {
+    var grid by remember { mutableStateOf(JDVViewModel.gridVm) }
 
     Box(
         modifier = Modifier
@@ -131,16 +132,17 @@ fun GridScreen(navHostController: NavHostController? , JDVViewModel: JDVViewMode
                     println(JDVViewModel.printGrid(JDVViewModel.gridVm))
                 })
             )
-            if(JDVViewModel.user.value.id!=null){
+
                 Image(painter = painterResource(id = R.drawable.enregistrer), contentDescription = "enregisté",modifier = Modifier
                     .size(75.dp)
                     .clickable(onClick = { JDVViewModel.addGrid() })
-                )}
+                )
             Image(painter = painterResource(id = R.drawable.exterminatus), contentDescription ="exterminatus",modifier = Modifier
                 .size(75.dp)
                 .clickable(onClick = {
                     JDVViewModel.exterminatus(JDVViewModel.gridVm)
                     JDVViewModel.printGrid(JDVViewModel.gridVm)
+                    JDVViewModel.printGrid(grid)
                 })
             )
             Image(painter = painterResource(id = R.drawable.lecture) , contentDescription ="lecture",modifier = Modifier

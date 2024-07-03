@@ -1,8 +1,10 @@
 package com.example.jdvapp.ui.theme.model
 
 import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,7 +23,7 @@ class JDVViewModel:ViewModel() {
 
     var gridWidthVm = mutableIntStateOf(10)
     var gridHeightVm = mutableIntStateOf(10)
-    var gridVm =  randomGrid(gridHeightVm,gridWidthVm)
+    var gridVm by mutableStateOf(randomGrid(gridHeightVm, gridWidthVm))
 
     var user = mutableStateOf(UserBean(userPseudo = ""))
 
@@ -112,9 +114,10 @@ class JDVViewModel:ViewModel() {
     }
 
     fun addGrid(){
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.Main) {
             try {
-                user.value.id?.let { JDVAPI.addGrid(it, grid = gridVm.toString()) }
+                println(user.value.id)
+                JDVAPI.addGrid(user.value.id!!,gridVm.toString())
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -133,7 +136,7 @@ class JDVViewModel:ViewModel() {
     fun loadUser(pseudo: String){
         viewModelScope.launch(Dispatchers.Default) {
             try {
-                user = mutableStateOf(JDVAPI.loadUser(pseudo))
+                user.value = mutableStateOf(JDVAPI.loadUser(pseudo)).value
             } catch (e: IOException) {
                 e.printStackTrace()
             }

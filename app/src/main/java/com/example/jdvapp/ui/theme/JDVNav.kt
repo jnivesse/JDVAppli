@@ -13,7 +13,6 @@ import com.example.jdvapp.ui.theme.model.UserBean
 import com.example.jdvapp.ui.theme.screen.GridScreen
 import com.example.jdvapp.ui.theme.screen.LogScreen
 import com.example.jdvapp.ui.theme.screen.RulesScreen
-import com.example.jdvapp.ui.theme.screen.SaveScreen
 sealed class Routes(val route: String) {
     // Route 1
      object HomeScreen : Routes("HomeScreen")
@@ -51,14 +50,6 @@ fun AppNavigation(viewModel: JDVViewModel) {
         composable(Routes.RulesScreen.route) {
             //on peut passer le navHostController à un écran s'il déclenche des navigations
             RulesScreen(navHostController, JDVViewModel = JDVViewModel())
-        }
-        //Route 2 vers un liste des save
-        composable(
-            route = Routes.SaveScreen.route,
-            arguments = listOf(navArgument("id") { type = NavType.LongType })
-        ) {
-            val idNav = it.arguments?.getLong("id") ?: 10
-            SaveScreen(navHostController,  JDVViewModel = JDVViewModel())
         }
     }
 }
